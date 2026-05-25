@@ -3,6 +3,7 @@ com\gadgetgalaxy\model\Smartphone.class
 com\gadgetgalaxy\view\Dashboard$4.class
 com\gadgetgalaxy\model\Category.class
 com\gadgetgalaxy\util\FileUtil.class
+com\gadgetgalaxy\view\ProductForm$4.class
 com\gadgetgalaxy\service\ProductService.class
 com\gadgetgalaxy\view\CustomersForm$1.class
 com\gadgetgalaxy\model\Supplier.class
