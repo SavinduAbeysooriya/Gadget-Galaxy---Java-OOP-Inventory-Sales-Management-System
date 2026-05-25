@@ -113,12 +113,16 @@ public class Dashboard extends JFrame {
 
             btnUsers   = createNavButton("👥", "Users", () -> showPanel(new UserManagementForm(controller)));
             btnReports = createNavButton("📈", "Reports", () -> showPanel(new ReportsForm(controller)));
-            JPanel btnCategories = createNavButton("🏷️", "Categories", () -> showPanel(new CategoryManagementForm(controller)));
-            JPanel btnBrands = createNavButton("🏢", "Brands", () -> showPanel(new BrandManagementForm(controller)));
+            JPanel btnCategories    = createNavButton("🏷️", "Categories", () -> showPanel(new CategoryManagementForm(controller)));
+            JPanel btnBrands        = createNavButton("🏢", "Brands", () -> showPanel(new BrandManagementForm(controller)));
+            JPanel btnSuppliers     = createNavButton("🏗️", "Suppliers", () -> showPanel(new SupplierManagementForm(controller)));
+            JPanel btnProdSuppliers = createNavButton("🔗", "Product Suppliers", () -> showPanel(new ProductSupplierForm(controller)));
             sidebar.add(btnUsers);
             sidebar.add(btnReports);
             sidebar.add(btnCategories);
             sidebar.add(btnBrands);
+            sidebar.add(btnSuppliers);
+            sidebar.add(btnProdSuppliers);
         }
 
         // Spacer

@@ -109,10 +109,10 @@ public class ReportsForm extends JPanel {
 
             JPanel statsRow = (JPanel) ((JPanel) getComponent(1)).getComponent(0);
             statsRow.removeAll();
-            statsRow.add(buildStatCard("Total Revenue", String.format("$%.2f", revenue), UIConstants.ACCENT_TEAL));
+            statsRow.add(buildStatCard("Total Revenue", String.format("LKR %.2f", revenue), UIConstants.ACCENT_TEAL));
             statsRow.add(buildStatCard("Completed Sales", String.valueOf(completed), UIConstants.ACCENT_BLUE));
             statsRow.add(buildStatCard("Cancelled Sales", String.valueOf(cancelled), UIConstants.ACCENT_RED));
-            statsRow.add(buildStatCard("Avg. Order Value", String.format("$%.2f", avgVal), UIConstants.ACCENT_PURPLE));
+            statsRow.add(buildStatCard("Avg. Order Value", String.format("LKR %.2f", avgVal), UIConstants.ACCENT_PURPLE));
             statsRow.revalidate();
             statsRow.repaint();
         } catch (DatabaseException e) {

@@ -81,7 +81,7 @@ public class ReportService {
                     customerName,
                     customerPhone,
                     soldByStr,
-                    String.format("$%.2f", s.getTotalAmount()),
+                    String.format("LKR %.2f", s.getTotalAmount()),
                     s.getPaymentMethod(),
                     s.getSaleStatus()
             });
