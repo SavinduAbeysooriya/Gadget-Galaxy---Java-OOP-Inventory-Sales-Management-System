@@ -50,7 +50,6 @@ com\gadgetgalaxy\model\Product.class
 com\gadgetgalaxy\util\InvoiceGenerator.class
 com\gadgetgalaxy\view\InventoryForm$3.class
 com\gadgetgalaxy\model\Sale.class
-com\gadgetgalaxy\view\SalesForm$4.class
 com\gadgetgalaxy\dao\SalesDAO.class
 com\gadgetgalaxy\view\SalesForm$1.class
 com\gadgetgalaxy\dao\BrandDAO.class
@@ -76,4 +75,3 @@ com\gadgetgalaxy\view\ReportsForm$2.class
 com\gadgetgalaxy\exception\AuthenticationException.class
 com\gadgetgalaxy\model\Inventory.class
 com\gadgetgalaxy\view\LoginForm$3.class
-com\gadgetgalaxy\view\SalesForm$5.class
