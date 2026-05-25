@@ -1,15 +1,19 @@
 package com.gadgetgalaxy.view;
 
 import com.gadgetgalaxy.controller.AppController;
+import com.gadgetgalaxy.dao.CustomerDAO;
 import com.gadgetgalaxy.exception.DatabaseException;
+import com.gadgetgalaxy.model.Customer;
 import com.gadgetgalaxy.model.Inventory;
 import com.gadgetgalaxy.model.Sale;
 import com.gadgetgalaxy.model.User;
 import com.gadgetgalaxy.service.AuthenticationService;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -375,21 +379,34 @@ public class Dashboard extends JFrame {
         home.setBackground(UIConstants.BG_DARK);
         home.setBorder(BorderFactory.createEmptyBorder(24, 24, 24, 24));
 
-        // Title
         JLabel title = new JLabel("Dashboard Overview");
         title.setFont(UIConstants.FONT_TITLE);
         title.setForeground(UIConstants.TEXT_HEADER);
         title.setBorder(BorderFactory.createEmptyBorder(0, 0, 16, 0));
         home.add(title, BorderLayout.NORTH);
 
+        boolean isManager = controller.isManager();
+        int currentUserId = controller.getCurrentUser() != null ? controller.getCurrentUser().getUserId() : -1;
+
         // Fetch stats
-        int totalProducts = 0, totalSales = 0, lowStockCount = 0;
-        double totalRevenue = 0;
+        int totalProducts = 0, totalSales = 0, lowStockCount = 0, mySalesToday = 0;
+        double totalRevenue = 0, myRevenue = 0;
+        List<Sale> allSales = List.of();
         try {
             totalProducts = controller.getProductService().getAllProducts().size();
-            List<Sale> sales = controller.getSalesService().getAllSales();
-            totalSales = sales.size();
-            for (Sale s : sales) if ("COMPLETED".equalsIgnoreCase(s.getSaleStatus())) totalRevenue += s.getTotalAmount();
+            allSales = controller.getSalesService().getAllSales();
+            totalSales = allSales.size();
+            LocalDate today = LocalDate.now();
+            for (Sale s : allSales) {
+                if ("COMPLETED".equalsIgnoreCase(s.getSaleStatus())) {
+                    totalRevenue += s.getTotalAmount();
+                    if (s.getSoldBy() == currentUserId) {
+                        myRevenue += s.getTotalAmount();
+                        if (s.getSaleDate() != null && s.getSaleDate().toLocalDate().equals(today))
+                            mySalesToday++;
+                    }
+                }
+            }
             lowStockCount = controller.getInventoryService().getLowStockItems().size();
         } catch (Exception e) {
             System.err.println("Dashboard stats error: " + e.getMessage());
@@ -397,24 +414,64 @@ public class Dashboard extends JFrame {
 
         Color lowStockColor = lowStockCount > 0 ? UIConstants.ACCENT_ORANGE : UIConstants.ACCENT_TEAL;
 
-        // Cards row — fixed height so it never expands
+        // Cards row
         JPanel cardsRow = new JPanel(new GridLayout(1, 4, 16, 0));
         cardsRow.setOpaque(false);
         cardsRow.setMaximumSize(new Dimension(Integer.MAX_VALUE, 130));
         cardsRow.setPreferredSize(new Dimension(0, 130));
-        cardsRow.add(buildStatCard("Total Revenue", String.format("LKR %.2f", totalRevenue), UIConstants.ACCENT_TEAL, "💰"));
-        cardsRow.add(buildStatCard("Total Sales", String.valueOf(totalSales), UIConstants.ACCENT_BLUE, "🛒"));
-        cardsRow.add(buildStatCard("Products", String.valueOf(totalProducts), UIConstants.ACCENT_PURPLE, "📱"));
-        cardsRow.add(buildStatCard("Low Stock Alerts", String.valueOf(lowStockCount), lowStockColor, "⚠️"));
 
-        // Bottom info panels — fixed height
+        if (isManager) {
+            cardsRow.add(buildStatCard("Total Revenue", String.format("LKR %.2f", totalRevenue), UIConstants.ACCENT_TEAL, "💰"));
+            cardsRow.add(buildStatCard("Total Sales", String.valueOf(totalSales), UIConstants.ACCENT_BLUE, "🛒"));
+            cardsRow.add(buildStatCard("Products", String.valueOf(totalProducts), UIConstants.ACCENT_PURPLE, "📱"));
+            cardsRow.add(buildStatCard("Low Stock Alerts", String.valueOf(lowStockCount), lowStockColor, "⚠️"));
+        } else {
+            // Sales rep sees their own stats
+            int myTotalSales = (int) allSales.stream().filter(s -> s.getSoldBy() == currentUserId).count();
+            cardsRow.add(buildStatCard("My Revenue", String.format("LKR %.2f", myRevenue), UIConstants.ACCENT_TEAL, "💰"));
+            cardsRow.add(buildStatCard("My Total Sales", String.valueOf(myTotalSales), UIConstants.ACCENT_BLUE, "🛒"));
+            cardsRow.add(buildStatCard("Today's Sales", String.valueOf(mySalesToday), UIConstants.ACCENT_PURPLE, "📅"));
+            cardsRow.add(buildStatCard("Low Stock Alerts", String.valueOf(lowStockCount), lowStockColor, "⚠️"));
+        }
+
+        // Bottom info panels
         JPanel infoPanel = new JPanel(new GridLayout(1, 2, 16, 0));
         infoPanel.setOpaque(false);
-        infoPanel.setPreferredSize(new Dimension(0, 200));
-        infoPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 200));
+        infoPanel.setPreferredSize(new Dimension(0, 220));
+        infoPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 220));
 
-        infoPanel.add(buildSectionPanel("Recent Sales"));
+        // Recent Sales panel with real data
+        JPanel recentSalesPanel = buildSectionPanel("Recent Sales");
+        String[] cols = {"Invoice", "Date", "Customer", "Total (LKR)", "Status"};
+        DefaultTableModel recentModel = new DefaultTableModel(cols, 0) {
+            @Override public boolean isCellEditable(int r, int c) { return false; }
+        };
+        JTable recentTable = new JTable(recentModel);
+        ProductForm.styleTable(recentTable);
+        recentTable.setRowHeight(28);
+        recentTable.getTableHeader().setPreferredSize(new Dimension(0, 24));
+        CustomerDAO customerDAO = new CustomerDAO();
+        List<Sale> displaySales = isManager ? allSales :
+                allSales.stream().filter(s -> s.getSoldBy() == currentUserId).collect(java.util.stream.Collectors.toList());
+        int limit = Math.min(5, displaySales.size());
+        for (int i = displaySales.size() - 1; i >= displaySales.size() - limit; i--) {
+            Sale s = displaySales.get(i);
+            String custName = "Walk-in";
+            if (s.getCustomerId() != null) {
+                try { Customer c = customerDAO.findById(s.getCustomerId()); if (c != null) custName = c.getCustomerName(); }
+                catch (DatabaseException ignored) {}
+            }
+            String date = s.getSaleDate() != null ? s.getSaleDate().toLocalDate().toString() : "N/A";
+            recentModel.addRow(new Object[]{ s.getInvoiceNo(), date, custName,
+                    String.format("LKR %.2f", s.getTotalAmount()), s.getSaleStatus() });
+        }
+        JScrollPane recentScroll = new JScrollPane(recentTable);
+        recentScroll.getViewport().setBackground(UIConstants.BG_DARK);
+        recentScroll.setBorder(BorderFactory.createLineBorder(UIConstants.BORDER_COLOR));
+        recentSalesPanel.add(recentScroll, BorderLayout.CENTER);
+        infoPanel.add(recentSalesPanel);
 
+        // System Status panel
         JPanel statusPanel = buildSectionPanel("System Status");
         JPanel statusContent = new JPanel();
         statusContent.setOpaque(false);
@@ -424,10 +481,13 @@ public class Dashboard extends JFrame {
         addStatusRow(statusContent, "Stock Monitor Thread", "Running", UIConstants.ACCENT_TEAL);
         addStatusRow(statusContent, "Auto-Backup Thread", "Running", UIConstants.ACCENT_TEAL);
         addStatusRow(statusContent, "Low Stock Products", lowStockCount + " items", lowStockColor);
+        if (!isManager) {
+            int myTotalSales = (int) allSales.stream().filter(s -> s.getSoldBy() == currentUserId).count();
+            addStatusRow(statusContent, "My Sales (All Time)", myTotalSales + " sales", UIConstants.ACCENT_BLUE);
+        }
         statusPanel.add(statusContent, BorderLayout.CENTER);
         infoPanel.add(statusPanel);
 
-        // Stack cards + info vertically, top-aligned
         JPanel centerStack = new JPanel();
         centerStack.setOpaque(false);
         centerStack.setLayout(new BoxLayout(centerStack, BoxLayout.Y_AXIS));

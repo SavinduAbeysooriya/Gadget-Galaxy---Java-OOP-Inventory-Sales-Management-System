@@ -65,6 +65,7 @@ com\gadgetgalaxy\dao\SalesDAO.class
 com\gadgetgalaxy\view\SalesForm$1.class
 com\gadgetgalaxy\dao\BrandDAO.class
 com\gadgetgalaxy\controller\AppController.class
+com\gadgetgalaxy\view\Dashboard$5.class
 com\gadgetgalaxy\view\JRoundedButton$1.class
 com\gadgetgalaxy\view\JRoundedButton.class
 com\gadgetgalaxy\view\SalesForm$2.class
