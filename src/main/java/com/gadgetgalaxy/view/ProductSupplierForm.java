@@ -90,7 +90,7 @@ public class ProductSupplierForm extends JPanel {
     }
 
     private JScrollPane buildTable() {
-        String[] cols = {"Link ID", "Product ID", "Product Name", "Supplier ID", "Supplier Name"};
+        String[] cols = {"Link ID", "Product Name", "Supplier Name"};
         tableModel = new DefaultTableModel(cols, 0) {
             @Override public boolean isCellEditable(int r, int c) { return false; }
         };
@@ -98,10 +98,8 @@ public class ProductSupplierForm extends JPanel {
         ProductForm.styleTable(table);
         table.setRowHeight(30);
         table.getColumnModel().getColumn(0).setPreferredWidth(65);
-        table.getColumnModel().getColumn(1).setPreferredWidth(75);
-        table.getColumnModel().getColumn(2).setPreferredWidth(240);
-        table.getColumnModel().getColumn(3).setPreferredWidth(80);
-        table.getColumnModel().getColumn(4).setPreferredWidth(200);
+        table.getColumnModel().getColumn(1).setPreferredWidth(300);
+        table.getColumnModel().getColumn(2).setPreferredWidth(260);
 
         sorter = new TableRowSorter<>(tableModel);
         table.setRowSorter(sorter);
@@ -147,7 +145,7 @@ public class ProductSupplierForm extends JPanel {
             for (int[] row : mappings) {
                 String productName  = findProductName(row[1]);
                 String supplierName = findSupplierName(row[2]);
-                tableModel.addRow(new Object[]{ row[0], row[1], productName, row[2], supplierName });
+            tableModel.addRow(new Object[]{ row[0], productName, supplierName });
             }
         } catch (DatabaseException e) {
             JOptionPane.showMessageDialog(this, "Failed to load data: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -185,8 +183,35 @@ public class ProductSupplierForm extends JPanel {
         styleCombo(productCombo);
         styleCombo(supplierCombo);
 
-        for (Product p  : products)  productCombo.addItem(p.getProductId()  + ": " + p.getProductName());
-        for (Supplier s : suppliers) supplierCombo.addItem(s.getSupplierId() + ": " + s.getSupplierName());
+        for (Product p : products) productCombo.addItem(p.getProductName());
+
+        // Holds the currently available (unlinked) suppliers for the selected product
+        java.util.List<Supplier> availableSuppliers = new java.util.ArrayList<>();
+
+        Runnable refreshSuppliers = () -> {
+            supplierCombo.removeAllItems();
+            availableSuppliers.clear();
+            int pIdx = productCombo.getSelectedIndex();
+            if (pIdx < 0 || pIdx >= products.size()) return;
+            int productId = products.get(pIdx).getProductId();
+            try {
+                java.util.List<Integer> linked = psDAO.findSupplierIdsByProduct(productId);
+                for (Supplier s : suppliers) {
+                    if (!linked.contains(s.getSupplierId())) {
+                        availableSuppliers.add(s);
+                        supplierCombo.addItem(s.getSupplierName());
+                    }
+                }
+                if (availableSuppliers.isEmpty()) {
+                    supplierCombo.addItem("— All suppliers already linked —");
+                }
+            } catch (DatabaseException ex) {
+                System.err.println("Supplier filter error: " + ex.getMessage());
+            }
+        };
+
+        productCombo.addActionListener(e -> refreshSuppliers.run());
+        refreshSuppliers.run();
 
         addRow(form, gbc, 0, "Product *",  productCombo);
         addRow(form, gbc, 1, "Supplier *", supplierCombo);
@@ -199,16 +224,18 @@ public class ProductSupplierForm extends JPanel {
         saveBtn.addActionListener(ev -> {
             int pIdx = productCombo.getSelectedIndex();
             int sIdx = supplierCombo.getSelectedIndex();
-            if (pIdx < 0 || sIdx < 0) { JOptionPane.showMessageDialog(dialog, "Select both product and supplier."); return; }
+            if (pIdx < 0 || sIdx < 0 || availableSuppliers.isEmpty()) {
+                JOptionPane.showMessageDialog(dialog, "No available suppliers for this product.", "Cannot Add", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            if (sIdx >= availableSuppliers.size()) {
+                JOptionPane.showMessageDialog(dialog, "Select a valid supplier."); return;
+            }
             int productId  = products.get(pIdx).getProductId();
-            int supplierId = suppliers.get(sIdx).getSupplierId();
+            int supplierId = availableSuppliers.get(sIdx).getSupplierId();
             try {
-                if (psDAO.exists(productId, supplierId)) {
-                    JOptionPane.showMessageDialog(dialog, "This product-supplier link already exists.", "Duplicate", JOptionPane.WARNING_MESSAGE);
-                    return;
-                }
                 psDAO.insert(productId, supplierId);
-                controller.logAction("Added product-supplier link: product " + productId + " → supplier " + supplierId);
+                controller.logAction("Added product-supplier link: " + findProductName(productId) + " → " + findSupplierName(supplierId));
                 JOptionPane.showMessageDialog(dialog, "Link added successfully!");
                 dialog.dispose();
                 loadData();
