@@ -1,0 +1,27 @@
+========================================================
+                  GADGET GALAXY STORE                   
+            Electronics Sales & Services               
+         102 Tech Boulevard, Colombo, Sri Lanka         
+               Tel: +94 11 234 5678                     
+========================================================
+Invoice No : INV-20260525-0001   
+Date       : 2026-05-25 11:57:05 
+Sold By    : Savi Abey           
+Status     : COMPLETED           
+========================================================
+CUSTOMER DETAILS:
+Name   : Isuru
+Phone  : 0772892789
+Email  : isuru@gmail.com
+========================================================
+Item Description          Qty   Price        Subtotal    
+========================================================
+Samsung Galaxy S21 Ultra  1     LKR 1199.99   LKR 1199.99  
+Apple iPad Air            1     LKR 599.00    LKR 599.00   
+========================================================
+GRAND TOTAL:                             LKR 1798.99
+Payment Method:                               CASH           
+========================================================
+            Thank you for shopping at Gadget Galaxy!    
+             Warranties are valid from purchase date.    
+========================================================

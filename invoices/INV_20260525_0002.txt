@@ -1,0 +1,27 @@
+========================================================
+                  GADGET GALAXY STORE                   
+            Electronics Sales & Services               
+         102 Tech Boulevard, Colombo, Sri Lanka         
+               Tel: +94 11 234 5678                     
+========================================================
+Invoice No : INV-20260525-0002   
+Date       : 2026-05-25 12:13:58 
+Sold By    : Tharindu Chandrawansha
+Status     : COMPLETED           
+========================================================
+CUSTOMER DETAILS:
+Name   : Isuru
+Phone  : 0772892789
+Email  : isuru@gmail.com
+========================================================
+Item Description          Qty   Price        Subtotal    
+========================================================
+Samsung Galaxy S21 Ultra  1     LKR 1199.99   LKR 1199.99  
+Samsung Galaxy Watch 4    2     LKR 249.99    LKR 499.98   
+========================================================
+GRAND TOTAL:                             LKR 1699.97
+Payment Method:                               CARD           
+========================================================
+            Thank you for shopping at Gadget Galaxy!    
+             Warranties are valid from purchase date.    
+========================================================
