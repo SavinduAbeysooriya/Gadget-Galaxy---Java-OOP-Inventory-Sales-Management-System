@@ -379,15 +379,11 @@ public class Dashboard extends JFrame {
         JLabel title = new JLabel("Dashboard Overview");
         title.setFont(UIConstants.FONT_TITLE);
         title.setForeground(UIConstants.TEXT_HEADER);
+        title.setBorder(BorderFactory.createEmptyBorder(0, 0, 16, 0));
         home.add(title, BorderLayout.NORTH);
 
-        // Cards row
-        JPanel cardsRow = new JPanel(new GridLayout(1, 4, 16, 0));
-        cardsRow.setOpaque(false);
-        cardsRow.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
-
         // Fetch stats
-        int totalProducts = 0, totalSales = 0, lowStockCount = 0, totalUsers = 0;
+        int totalProducts = 0, totalSales = 0, lowStockCount = 0;
         double totalRevenue = 0;
         try {
             totalProducts = controller.getProductService().getAllProducts().size();
@@ -395,31 +391,30 @@ public class Dashboard extends JFrame {
             totalSales = sales.size();
             for (Sale s : sales) if ("COMPLETED".equalsIgnoreCase(s.getSaleStatus())) totalRevenue += s.getTotalAmount();
             lowStockCount = controller.getInventoryService().getLowStockItems().size();
-            if (controller.isManager()) {
-                totalUsers = controller.getAuthService() != null ? new com.gadgetgalaxy.dao.UserDAO().findAll().size() : 0;
-            }
         } catch (Exception e) {
             System.err.println("Dashboard stats error: " + e.getMessage());
         }
 
+        Color lowStockColor = lowStockCount > 0 ? UIConstants.ACCENT_ORANGE : UIConstants.ACCENT_TEAL;
+
+        // Cards row — fixed height so it never expands
+        JPanel cardsRow = new JPanel(new GridLayout(1, 4, 16, 0));
+        cardsRow.setOpaque(false);
+        cardsRow.setMaximumSize(new Dimension(Integer.MAX_VALUE, 130));
+        cardsRow.setPreferredSize(new Dimension(0, 130));
         cardsRow.add(buildStatCard("Total Revenue", String.format("LKR %.2f", totalRevenue), UIConstants.ACCENT_TEAL, "💰"));
         cardsRow.add(buildStatCard("Total Sales", String.valueOf(totalSales), UIConstants.ACCENT_BLUE, "🛒"));
         cardsRow.add(buildStatCard("Products", String.valueOf(totalProducts), UIConstants.ACCENT_PURPLE, "📱"));
-
-        Color lowStockColor = lowStockCount > 0 ? UIConstants.ACCENT_ORANGE : UIConstants.ACCENT_TEAL;
         cardsRow.add(buildStatCard("Low Stock Alerts", String.valueOf(lowStockCount), lowStockColor, "⚠️"));
 
-        home.add(cardsRow, BorderLayout.CENTER);
-
-        // Quick info section
+        // Bottom info panels — fixed height
         JPanel infoPanel = new JPanel(new GridLayout(1, 2, 16, 0));
         infoPanel.setOpaque(false);
+        infoPanel.setPreferredSize(new Dimension(0, 200));
+        infoPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 200));
 
-        // Recent sales preview
-        JPanel recentSalesPanel = buildSectionPanel("Recent Sales");
-        infoPanel.add(recentSalesPanel);
+        infoPanel.add(buildSectionPanel("Recent Sales"));
 
-        // System status
         JPanel statusPanel = buildSectionPanel("System Status");
         JPanel statusContent = new JPanel();
         statusContent.setOpaque(false);
@@ -432,8 +427,16 @@ public class Dashboard extends JFrame {
         statusPanel.add(statusContent, BorderLayout.CENTER);
         infoPanel.add(statusPanel);
 
-        home.add(infoPanel, BorderLayout.SOUTH);
+        // Stack cards + info vertically, top-aligned
+        JPanel centerStack = new JPanel();
+        centerStack.setOpaque(false);
+        centerStack.setLayout(new BoxLayout(centerStack, BoxLayout.Y_AXIS));
+        centerStack.add(cardsRow);
+        centerStack.add(Box.createVerticalStrut(16));
+        centerStack.add(infoPanel);
+        centerStack.add(Box.createVerticalGlue());
 
+        home.add(centerStack, BorderLayout.CENTER);
         return home;
     }
 
@@ -460,7 +463,7 @@ public class Dashboard extends JFrame {
         iconLabel.setForeground(accentColor);
 
         JLabel valueLabel = new JLabel(value);
-        valueLabel.setFont(new Font("Segoe UI", Font.BOLD, 26));
+        valueLabel.setFont(new Font("Segoe UI", Font.BOLD, 20));
         valueLabel.setForeground(UIConstants.TEXT_HEADER);
 
         JLabel titleLabel = new JLabel(title);
