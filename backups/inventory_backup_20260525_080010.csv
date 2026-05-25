@@ -1,0 +1,7 @@
+"inventory_id","product_code","product_name","quantity_in_stock","reorder_level","last_stock_update"
+"1","SM-G998B","Samsung Galaxy S21 Ultra","12","5","2026-05-25T13:29:24"
+"2","AP-M1X82","Apple MacBook Pro 14""","8","3","2026-05-25T12:44:08"
+"3","AP-MHR23","Apple iPad Air","12","4","2026-05-25T12:44:08"
+"4","SM-R870N","Samsung Galaxy Watch 4","25","8","2026-05-25T12:44:08"
+"5","SO-WH1000XM4","Sony WH-1000XM4 Headphones","18","5","2026-05-25T13:28:36"
+"6","AK-A2633","Anker Nano II 65W Charger","50","10","2026-05-25T12:44:08"
