@@ -69,7 +69,7 @@ public class Dashboard extends JFrame {
         logoPanel.setOpaque(false);
         logoPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 16, 18));
         logoPanel.setMaximumSize(new Dimension(UIConstants.SIDEBAR_WIDTH, 65));
-        JLabel logo = new JLabel("✦  Gadget Galaxy");
+        JLabel logo = new JLabel("📱 Gadget Galaxy");
         logo.setFont(new Font("Segoe UI", Font.BOLD, 14));
         logo.setForeground(UIConstants.ACCENT_BLUE);
         logoPanel.add(logo);
@@ -88,10 +88,10 @@ public class Dashboard extends JFrame {
         sidebar.add(Box.createVerticalStrut(4));
 
         // Nav buttons
-        btnDashboard = createNavButton("⊞", "Dashboard", () -> showHomePanel());
-        btnProducts  = createNavButton("▣", "Products", () -> showPanel(new ProductForm(controller)));
-        btnInventory = createNavButton("≡", "Inventory", () -> showPanel(new InventoryForm(controller)));
-        btnSales     = createNavButton("◎", "Sales", () -> showPanel(new SalesForm(controller)));
+        btnDashboard = createNavButton("📊", "Dashboard", () -> showHomePanel());
+        btnProducts  = createNavButton("📱", "Products", () -> showPanel(new ProductForm(controller)));
+        btnInventory = createNavButton("📦", "Inventory", () -> showPanel(new InventoryForm(controller)));
+        btnSales     = createNavButton("🛒", "Sales", () -> showPanel(new SalesForm(controller)));
 
         sidebar.add(btnDashboard);
         sidebar.add(btnProducts);
@@ -109,8 +109,8 @@ public class Dashboard extends JFrame {
             sidebar.add(mgLabel);
             sidebar.add(Box.createVerticalStrut(4));
 
-            btnUsers   = createNavButton("◉", "Users", () -> showPanel(new UserManagementForm(controller)));
-            btnReports = createNavButton("◈", "Reports", () -> showPanel(new ReportsForm(controller)));
+            btnUsers   = createNavButton("👥", "Users", () -> showPanel(new UserManagementForm(controller)));
+            btnReports = createNavButton("📈", "Reports", () -> showPanel(new ReportsForm(controller)));
             sidebar.add(btnUsers);
             sidebar.add(btnReports);
         }
@@ -120,8 +120,8 @@ public class Dashboard extends JFrame {
         sidebar.add(createSeparator());
 
         // Logout button
-        btnLogout = createNavButton("⬡", "Logout", this::doLogout);
-        ((JLabel) btnLogout.getComponent(0)).setForeground(UIConstants.ACCENT_RED);
+        btnLogout = createNavButton("🔓", "Logout", this::doLogout);
+        for (Component c : btnLogout.getComponents()) if (c instanceof JLabel) ((JLabel) c).setForeground(UIConstants.ACCENT_RED);
         sidebar.add(btnLogout);
         sidebar.add(Box.createVerticalStrut(10));
 
@@ -137,7 +137,16 @@ public class Dashboard extends JFrame {
         JLabel lbl = new JLabel(icon + "  " + label);
         lbl.setFont(UIConstants.FONT_BODY);
         lbl.setForeground(UIConstants.TEXT_MUTED);
-        btn.add(lbl);
+
+        // Render icon part with emoji font
+        JLabel iconLbl = new JLabel(icon);
+        iconLbl.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 15));
+        iconLbl.setForeground(UIConstants.TEXT_MUTED);
+        JLabel textLbl = new JLabel(label);
+        textLbl.setFont(UIConstants.FONT_BODY);
+        textLbl.setForeground(UIConstants.TEXT_MUTED);
+        btn.add(iconLbl);
+        btn.add(textLbl);
 
         btn.addMouseListener(new MouseAdapter() {
             @Override
@@ -145,7 +154,7 @@ public class Dashboard extends JFrame {
                 if (btn != activeNavButton) {
                     btn.setOpaque(true);
                     btn.setBackground(new Color(30, 36, 55));
-                    lbl.setForeground(UIConstants.TEXT_PRIMARY);
+                    for (Component c : btn.getComponents()) if (c instanceof JLabel) ((JLabel)c).setForeground(UIConstants.TEXT_PRIMARY);
                     btn.repaint();
                 }
             }
@@ -154,14 +163,14 @@ public class Dashboard extends JFrame {
             public void mouseExited(MouseEvent e) {
                 if (btn != activeNavButton) {
                     btn.setOpaque(false);
-                    lbl.setForeground(UIConstants.TEXT_MUTED);
+                    for (Component c : btn.getComponents()) if (c instanceof JLabel) ((JLabel)c).setForeground(UIConstants.TEXT_MUTED);
                     btn.repaint();
                 }
             }
 
             @Override
             public void mouseClicked(MouseEvent e) {
-                setActiveNav(btn, lbl);
+                setActiveNav(btn);
                 action.run();
             }
         });
@@ -169,19 +178,18 @@ public class Dashboard extends JFrame {
         return btn;
     }
 
-    private void setActiveNav(JPanel btn, JLabel lbl) {
-        // Deactivate previous
+    private void setActiveNav(JPanel btn) {
         if (activeNavButton != null) {
             activeNavButton.setOpaque(false);
             activeNavButton.repaint();
-            for (Component c : activeNavButton.getComponents()) {
+            for (Component c : activeNavButton.getComponents())
                 if (c instanceof JLabel) ((JLabel) c).setForeground(UIConstants.TEXT_MUTED);
-            }
         }
         activeNavButton = btn;
         btn.setOpaque(true);
         btn.setBackground(new Color(40, 60, 100));
-        lbl.setForeground(UIConstants.ACCENT_BLUE);
+        for (Component c : btn.getComponents())
+            if (c instanceof JLabel) ((JLabel) c).setForeground(UIConstants.ACCENT_BLUE);
         btn.repaint();
     }
 
@@ -348,7 +356,7 @@ public class Dashboard extends JFrame {
     }
 
     private void showHomePanel() {
-        setActiveNav(btnDashboard, (JLabel) btnDashboard.getComponent(0));
+        setActiveNav(btnDashboard);
         showPanel(buildHomePanel());
     }
 
@@ -384,12 +392,12 @@ public class Dashboard extends JFrame {
             System.err.println("Dashboard stats error: " + e.getMessage());
         }
 
-        cardsRow.add(buildStatCard("Total Revenue", String.format("$%.2f", totalRevenue), UIConstants.ACCENT_TEAL, "◎"));
-        cardsRow.add(buildStatCard("Total Sales", String.valueOf(totalSales), UIConstants.ACCENT_BLUE, "◈"));
-        cardsRow.add(buildStatCard("Products", String.valueOf(totalProducts), UIConstants.ACCENT_PURPLE, "▣"));
+        cardsRow.add(buildStatCard("Total Revenue", String.format("$%.2f", totalRevenue), UIConstants.ACCENT_TEAL, "💰"));
+        cardsRow.add(buildStatCard("Total Sales", String.valueOf(totalSales), UIConstants.ACCENT_BLUE, "🛒"));
+        cardsRow.add(buildStatCard("Products", String.valueOf(totalProducts), UIConstants.ACCENT_PURPLE, "📱"));
 
         Color lowStockColor = lowStockCount > 0 ? UIConstants.ACCENT_ORANGE : UIConstants.ACCENT_TEAL;
-        cardsRow.add(buildStatCard("Low Stock Alerts", String.valueOf(lowStockCount), lowStockColor, "⚠"));
+        cardsRow.add(buildStatCard("Low Stock Alerts", String.valueOf(lowStockCount), lowStockColor, "⚠️"));
 
         home.add(cardsRow, BorderLayout.CENTER);
 
@@ -438,7 +446,7 @@ public class Dashboard extends JFrame {
         card.setBorder(BorderFactory.createEmptyBorder(18, 18, 18, 18));
 
         JLabel iconLabel = new JLabel(icon);
-        iconLabel.setFont(new Font("Segoe UI", Font.PLAIN, 22));
+        iconLabel.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 22));
         iconLabel.setForeground(accentColor);
 
         JLabel valueLabel = new JLabel(value);
