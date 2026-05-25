@@ -2,6 +2,7 @@ package com.gadgetgalaxy.view;
 
 import com.gadgetgalaxy.controller.AppController;
 import com.gadgetgalaxy.dao.CategoryDAO;
+import com.gadgetgalaxy.dao.InventoryDAO;
 import com.gadgetgalaxy.dao.ProductDAO;
 import com.gadgetgalaxy.exception.DatabaseException;
 import com.gadgetgalaxy.exception.ValidationException;
@@ -13,6 +14,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,7 +27,8 @@ public class InventoryForm extends JPanel {
     private JTable inventoryTable;
     private DefaultTableModel tableModel;
     private JTextField searchField;
-    private List<Inventory> currentInventory;
+    private List<Inventory> currentInventory;  // null entry = no DB record for that row
+    private List<Product>   currentProducts;   // parallel list — same index as table rows
 
     public InventoryForm(AppController controller) {
         this.controller = controller;
@@ -89,10 +92,13 @@ public class InventoryForm extends JPanel {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
                 Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                // Check if this row is low stock
-                if (!isSelected && row < currentInventory.size()) {
+                if (!isSelected && currentInventory != null && row < currentInventory.size()) {
                     Inventory inv = currentInventory.get(row);
-                    if (inv.isLowStock()) {
+                    if (inv == null) {
+                        // No inventory record — highlight in blue/purple
+                        c.setBackground(new Color(25, 30, 60));
+                        c.setForeground(UIConstants.ACCENT_PURPLE);
+                    } else if (inv.isLowStock()) {
                         c.setBackground(new Color(50, 30, 20));
                         c.setForeground(UIConstants.ACCENT_ORANGE);
                     } else {
@@ -129,9 +135,9 @@ public class InventoryForm extends JPanel {
             bottom.add(addStockBtn);
         }
 
-        JLabel hint = new JLabel("  ⚠ Rows highlighted in orange are below reorder level.");
+        JLabel hint = new JLabel("  ⚠ Orange = low stock   │   🟣 Purple = no inventory record yet");
         hint.setFont(UIConstants.FONT_SMALL);
-        hint.setForeground(UIConstants.ACCENT_ORANGE);
+        hint.setForeground(UIConstants.TEXT_MUTED);
         bottom.add(hint);
 
         add(bottom, BorderLayout.SOUTH);
@@ -139,8 +145,40 @@ public class InventoryForm extends JPanel {
 
     private void loadInventory() {
         try {
-            currentInventory = controller.getInventoryService().getAllInventory();
-            populateTable(currentInventory);
+            List<Product> allProducts = controller.getProductService().getAllProducts();
+            InventoryDAO invDAO = new InventoryDAO();
+            currentInventory = new ArrayList<>();
+            currentProducts  = new ArrayList<>();
+            tableModel.setRowCount(0);
+            CategoryDAO catDAO = new CategoryDAO();
+
+            for (Product p : allProducts) {
+                Inventory inv = invDAO.findByProductId(p.getProductId());
+                String catName = "N/A";
+                try {
+                    Category cat = catDAO.findById(p.getCategoryId());
+                    if (cat != null) catName = cat.getCategoryName();
+                } catch (DatabaseException ignored) {}
+
+                currentInventory.add(inv);   // may be null
+                currentProducts.add(p);
+
+                if (inv != null) {
+                    String status = inv.isLowStock() ? "⚠ LOW STOCK" : "✓ OK";
+                    String lastUpdate = inv.getLastStockUpdate() != null
+                            ? inv.getLastStockUpdate().toLocalDate().toString() : "N/A";
+                    tableModel.addRow(new Object[]{
+                            inv.getInventoryId(), p.getProductCode(), p.getProductName(),
+                            catName, inv.getQuantityInStock(), inv.getReorderLevel(),
+                            status, lastUpdate
+                    });
+                } else {
+                    tableModel.addRow(new Object[]{
+                            "—", p.getProductCode(), p.getProductName(),
+                            catName, "—", "—", "⚠ NO RECORD", "—"
+                    });
+                }
+            }
         } catch (DatabaseException e) {
             JOptionPane.showMessageDialog(this, "Error loading inventory: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -148,24 +186,37 @@ public class InventoryForm extends JPanel {
 
     private void filterTable() {
         String query = searchField.getText().trim().toLowerCase();
-        if (query.isEmpty()) {
-            loadInventory();
-            return;
-        }
-        tableModel.setRowCount(0);
-        if (currentInventory != null) {
-            for (Inventory inv : currentInventory) {
-                // Check if the table already has this row
-            }
-        }
-        // Re-populate filtered
+        if (query.isEmpty()) { loadInventory(); return; }
         try {
             List<Product> found = controller.getProductService().searchProducts(query);
+            InventoryDAO invDAO = new InventoryDAO();
+            CategoryDAO catDAO = new CategoryDAO();
+            currentInventory = new ArrayList<>();
+            currentProducts  = new ArrayList<>();
             tableModel.setRowCount(0);
             for (Product p : found) {
-                Inventory inv = controller.getInventoryService().getInventoryByProductId(p.getProductId());
+                Inventory inv = invDAO.findByProductId(p.getProductId());
+                String catName = "N/A";
+                try {
+                    Category cat = catDAO.findById(p.getCategoryId());
+                    if (cat != null) catName = cat.getCategoryName();
+                } catch (DatabaseException ignored) {}
+                currentInventory.add(inv);
+                currentProducts.add(p);
                 if (inv != null) {
-                    addInventoryRow(inv, p);
+                    String status = inv.isLowStock() ? "⚠ LOW STOCK" : "✓ OK";
+                    String lastUpdate = inv.getLastStockUpdate() != null
+                            ? inv.getLastStockUpdate().toLocalDate().toString() : "N/A";
+                    tableModel.addRow(new Object[]{
+                            inv.getInventoryId(), p.getProductCode(), p.getProductName(),
+                            catName, inv.getQuantityInStock(), inv.getReorderLevel(),
+                            status, lastUpdate
+                    });
+                } else {
+                    tableModel.addRow(new Object[]{
+                            "—", p.getProductCode(), p.getProductName(),
+                            catName, "—", "—", "⚠ NO RECORD", "—"
+                    });
                 }
             }
         } catch (DatabaseException e) {
@@ -173,62 +224,36 @@ public class InventoryForm extends JPanel {
         }
     }
 
-    private void populateTable(List<Inventory> inventoryList) {
-        tableModel.setRowCount(0);
-        ProductDAO prodDAO = new ProductDAO();
-        CategoryDAO catDAO = new CategoryDAO();
-        for (Inventory inv : inventoryList) {
-            try {
-                Product p = prodDAO.findById(inv.getProductId());
-                if (p != null) addInventoryRow(inv, p);
-            } catch (DatabaseException e) { /* skip */ }
-        }
-    }
-
-    private void addInventoryRow(Inventory inv, Product p) {
-        String catName = "";
-        try {
-            Category cat = new CategoryDAO().findById(p.getCategoryId());
-            catName = cat != null ? cat.getCategoryName() : "N/A";
-        } catch (DatabaseException e) { catName = "N/A"; }
-
-        String status = inv.isLowStock() ? "⚠ LOW STOCK" : "✓ OK";
-        String lastUpdate = inv.getLastStockUpdate() != null ?
-                inv.getLastStockUpdate().toLocalDate().toString() : "N/A";
-
-        tableModel.addRow(new Object[]{
-                inv.getInventoryId(),
-                p.getProductCode(),
-                p.getProductName(),
-                catName,
-                inv.getQuantityInStock(),
-                inv.getReorderLevel(),
-                status,
-                lastUpdate
-        });
-    }
-
     private void showAddStockDialog() {
         int row = inventoryTable.getSelectedRow();
-        if (row < 0 || row >= currentInventory.size()) {
+        if (row < 0 || row >= currentProducts.size()) {
             JOptionPane.showMessageDialog(this, "Please select a product from the inventory table.");
             return;
         }
+        Product p   = currentProducts.get(row);
         Inventory inv = currentInventory.get(row);
-        String productName = "Unknown";
-        try {
-            Product p = new ProductDAO().findById(inv.getProductId());
-            if (p != null) productName = p.getProductName();
-        } catch (DatabaseException e) { /* ignore */ }
 
+        // Auto-create inventory record if missing
+        if (inv == null) {
+            try {
+                inv = new Inventory(p.getProductId(), 0, 5);
+                new InventoryDAO().insert(inv);
+                controller.logAction("Created inventory record for: " + p.getProductName());
+            } catch (DatabaseException e) {
+                JOptionPane.showMessageDialog(this, "Failed to create inventory record: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
+
+        final Inventory finalInv = inv;
         String input = JOptionPane.showInputDialog(this,
-                "Add stock units for: " + productName + "\n(Current stock: " + inv.getQuantityInStock() + ")",
+                "Add stock units for: " + p.getProductName() + "\n(Current stock: " + finalInv.getQuantityInStock() + ")",
                 "Add Stock", JOptionPane.QUESTION_MESSAGE);
         if (input == null || input.trim().isEmpty()) return;
 
         try {
             int qty = Integer.parseInt(input.trim());
-            controller.getInventoryService().addStock(inv.getProductId(), qty, controller.getCurrentUser().getUserId());
+            controller.getInventoryService().addStock(p.getProductId(), qty, controller.getCurrentUser().getUserId());
             JOptionPane.showMessageDialog(this, qty + " units added successfully!");
             loadInventory();
         } catch (NumberFormatException e) {
@@ -240,11 +265,15 @@ public class InventoryForm extends JPanel {
 
     private void showReorderDialog() {
         int row = inventoryTable.getSelectedRow();
-        if (row < 0 || row >= currentInventory.size()) {
+        if (row < 0 || row >= currentProducts.size()) {
             JOptionPane.showMessageDialog(this, "Please select a product from the inventory table.");
             return;
         }
         Inventory inv = currentInventory.get(row);
+        if (inv == null) {
+            JOptionPane.showMessageDialog(this, "No inventory record yet. Use \"Add Stock\" first to create one.", "No Record", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
         String input = JOptionPane.showInputDialog(this,
                 "Set reorder level (current: " + inv.getReorderLevel() + "):",
                 "Reorder Level", JOptionPane.QUESTION_MESSAGE);
