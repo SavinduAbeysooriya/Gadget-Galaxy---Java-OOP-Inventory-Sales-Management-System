@@ -35,6 +35,7 @@ com\gadgetgalaxy\view\BrandManagementForm$1.class
 com\gadgetgalaxy\service\ReportService.class
 com\gadgetgalaxy\dao\SupplierDAO.class
 com\gadgetgalaxy\view\Dashboard$3.class
+com\gadgetgalaxy\view\LoginForm$5.class
 com\gadgetgalaxy\view\ProductForm$3.class
 com\gadgetgalaxy\dao\InventoryDAO.class
 com\gadgetgalaxy\view\LoginForm$1.class
@@ -60,6 +61,7 @@ com\gadgetgalaxy\model\Product.class
 com\gadgetgalaxy\util\InvoiceGenerator.class
 com\gadgetgalaxy\dao\ProductSupplierDAO.class
 com\gadgetgalaxy\view\InventoryForm$3.class
+com\gadgetgalaxy\view\LoginForm$FocusRoundBorder.class
 com\gadgetgalaxy\model\Sale.class
 com\gadgetgalaxy\dao\SalesDAO.class
 com\gadgetgalaxy\view\SalesForm$1.class
@@ -74,12 +76,14 @@ com\gadgetgalaxy\view\CategoryManagementForm$1.class
 com\gadgetgalaxy\model\SaleItem.class
 com\gadgetgalaxy\view\UIConstants.class
 com\gadgetgalaxy\model\Tablet.class
+com\gadgetgalaxy\view\LoginForm$4$1.class
 com\gadgetgalaxy\view\Dashboard$1.class
 com\gadgetgalaxy\service\SalesService.class
 com\gadgetgalaxy\util\ValidationUtil.class
 com\gadgetgalaxy\view\ProductForm$1.class
 com\gadgetgalaxy\view\SalesForm.class
 com\gadgetgalaxy\view\InventoryForm$2.class
+com\gadgetgalaxy\view\LoginForm$6.class
 com\gadgetgalaxy\view\InventoryForm.class
 com\gadgetgalaxy\model\StoreManager.class
 com\gadgetgalaxy\view\LoginForm.class
