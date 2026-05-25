@@ -4,6 +4,7 @@ com\gadgetgalaxy\view\Dashboard$4.class
 com\gadgetgalaxy\model\Category.class
 com\gadgetgalaxy\util\FileUtil.class
 com\gadgetgalaxy\service\ProductService.class
+com\gadgetgalaxy\view\CustomersForm$1.class
 com\gadgetgalaxy\model\Supplier.class
 com\gadgetgalaxy\view\InventoryForm$1.class
 com\gadgetgalaxy\exception\DatabaseException.class
@@ -15,10 +16,12 @@ com\gadgetgalaxy\view\BrandManagementForm.class
 com\gadgetgalaxy\view\UIConstants$1.class
 com\gadgetgalaxy\view\LoginForm$2.class
 com\gadgetgalaxy\view\UserManagementForm$1.class
+com\gadgetgalaxy\view\CustomersForm.class
 com\gadgetgalaxy\view\UserManagementForm.class
 com\gadgetgalaxy\view\ReportsForm$3.class
 com\gadgetgalaxy\model\Customer.class
 com\gadgetgalaxy\util\DBConnection.class
+com\gadgetgalaxy\view\CustomersForm$2.class
 com\gadgetgalaxy\dao\AuditLogDAO.class
 com\gadgetgalaxy\service\InventoryService.class
 com\gadgetgalaxy\view\Dashboard.class
@@ -36,6 +39,7 @@ com\gadgetgalaxy\view\InventoryForm$4.class
 com\gadgetgalaxy\exception\ValidationException.class
 com\gadgetgalaxy\dao\ProductDAO.class
 com\gadgetgalaxy\view\LoginForm$4.class
+com\gadgetgalaxy\view\CustomersForm$3.class
 com\gadgetgalaxy\view\ReportsForm.class
 com\gadgetgalaxy\view\ReportsForm$1.class
 com\gadgetgalaxy\model\User.class

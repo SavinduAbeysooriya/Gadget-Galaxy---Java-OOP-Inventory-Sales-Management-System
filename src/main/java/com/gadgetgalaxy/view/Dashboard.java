@@ -92,11 +92,13 @@ public class Dashboard extends JFrame {
         btnProducts  = createNavButton("📱", "Products", () -> showPanel(new ProductForm(controller)));
         btnInventory = createNavButton("📦", "Inventory", () -> showPanel(new InventoryForm(controller)));
         btnSales     = createNavButton("🛒", "Sales", () -> showPanel(new SalesForm(controller)));
+        JPanel btnCustomers = createNavButton("👤", "Customers", () -> showPanel(new CustomersForm(controller)));
 
         sidebar.add(btnDashboard);
         sidebar.add(btnProducts);
         sidebar.add(btnInventory);
         sidebar.add(btnSales);
+        sidebar.add(btnCustomers);
 
         // Manager-only section
         User user = controller.getCurrentUser();
