@@ -7,12 +7,14 @@ com\gadgetgalaxy\view\ProductForm$4.class
 com\gadgetgalaxy\service\ProductService.class
 com\gadgetgalaxy\view\CustomersForm$1.class
 com\gadgetgalaxy\model\Supplier.class
+com\gadgetgalaxy\view\SupplierManagementForm$1.class
 com\gadgetgalaxy\view\InventoryForm$1.class
 com\gadgetgalaxy\exception\DatabaseException.class
 com\gadgetgalaxy\service\AuthenticationService.class
 com\gadgetgalaxy\view\CategoryManagementForm.class
 com\gadgetgalaxy\view\SalesForm$3.class
 com\gadgetgalaxy\dao\DAO.class
+com\gadgetgalaxy\view\ProductSupplierForm$1.class
 com\gadgetgalaxy\view\BrandManagementForm.class
 com\gadgetgalaxy\view\UIConstants$1.class
 com\gadgetgalaxy\view\LoginForm$2.class
@@ -21,6 +23,7 @@ com\gadgetgalaxy\view\CustomersForm.class
 com\gadgetgalaxy\view\UserManagementForm.class
 com\gadgetgalaxy\view\ReportsForm$3.class
 com\gadgetgalaxy\model\Customer.class
+com\gadgetgalaxy\view\SupplierManagementForm$2.class
 com\gadgetgalaxy\util\DBConnection.class
 com\gadgetgalaxy\view\CustomersForm$2.class
 com\gadgetgalaxy\dao\AuditLogDAO.class
@@ -35,6 +38,7 @@ com\gadgetgalaxy\view\Dashboard$3.class
 com\gadgetgalaxy\view\ProductForm$3.class
 com\gadgetgalaxy\dao\InventoryDAO.class
 com\gadgetgalaxy\view\LoginForm$1.class
+com\gadgetgalaxy\view\ProductSupplierForm.class
 com\gadgetgalaxy\model\SalesRepresentative.class
 com\gadgetgalaxy\view\InventoryForm$4.class
 com\gadgetgalaxy\exception\ValidationException.class
@@ -49,10 +53,12 @@ com\gadgetgalaxy\dao\CustomerDAO.class
 com\gadgetgalaxy\main\Main.class
 com\gadgetgalaxy\view\ProductForm$2.class
 com\gadgetgalaxy\view\Dashboard$2.class
+com\gadgetgalaxy\view\SupplierManagementForm.class
 com\gadgetgalaxy\model\Accessory.class
 com\gadgetgalaxy\model\Laptop.class
 com\gadgetgalaxy\model\Product.class
 com\gadgetgalaxy\util\InvoiceGenerator.class
+com\gadgetgalaxy\dao\ProductSupplierDAO.class
 com\gadgetgalaxy\view\InventoryForm$3.class
 com\gadgetgalaxy\model\Sale.class
 com\gadgetgalaxy\dao\SalesDAO.class
@@ -80,3 +86,5 @@ com\gadgetgalaxy\view\ReportsForm$2.class
 com\gadgetgalaxy\exception\AuthenticationException.class
 com\gadgetgalaxy\model\Inventory.class
 com\gadgetgalaxy\view\LoginForm$3.class
+com\gadgetgalaxy\view\SupplierManagementForm$3.class
+com\gadgetgalaxy\view\ProductSupplierForm$2.class
