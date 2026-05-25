@@ -48,10 +48,17 @@ public class CustomersForm extends JPanel {
         header.setOpaque(false);
         header.setBorder(BorderFactory.createEmptyBorder(0, 0, 16, 0));
 
-        JLabel title = new JLabel("👤 Customers");
-        title.setFont(UIConstants.FONT_TITLE);
-        title.setForeground(UIConstants.TEXT_HEADER);
-        header.add(title, BorderLayout.WEST);
+        JLabel titleIcon = new JLabel("\uD83D\uDC64");
+        titleIcon.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 22));
+        titleIcon.setForeground(UIConstants.TEXT_HEADER);
+        JLabel titleText = new JLabel(" Customers");
+        titleText.setFont(UIConstants.FONT_TITLE);
+        titleText.setForeground(UIConstants.TEXT_HEADER);
+        JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        titlePanel.setOpaque(false);
+        titlePanel.add(titleIcon);
+        titlePanel.add(titleText);
+        header.add(titlePanel, BorderLayout.WEST);
 
         // Search bar + add button
         JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));

@@ -73,10 +73,14 @@ public class Dashboard extends JFrame {
         logoPanel.setOpaque(false);
         logoPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 16, 18));
         logoPanel.setMaximumSize(new Dimension(UIConstants.SIDEBAR_WIDTH, 65));
-        JLabel logo = new JLabel("📱 Gadget Galaxy");
-        logo.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        logo.setForeground(UIConstants.ACCENT_BLUE);
-        logoPanel.add(logo);
+        JLabel logoIcon = new JLabel("\uD83D\uDCF1");
+        logoIcon.setFont(new Font("Segoe UI Emoji", Font.BOLD, 14));
+        logoIcon.setForeground(UIConstants.ACCENT_BLUE);
+        JLabel logoText = new JLabel(" Gadget Galaxy");
+        logoText.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        logoText.setForeground(UIConstants.ACCENT_BLUE);
+        logoPanel.add(logoIcon);
+        logoPanel.add(logoText);
         sidebar.add(logoPanel);
 
         // Divider

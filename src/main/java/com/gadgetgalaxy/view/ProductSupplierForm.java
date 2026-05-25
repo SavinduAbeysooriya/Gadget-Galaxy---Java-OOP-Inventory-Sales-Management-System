@@ -54,10 +54,17 @@ public class ProductSupplierForm extends JPanel {
         header.setOpaque(false);
         header.setBorder(BorderFactory.createEmptyBorder(0, 0, 16, 0));
 
-        JLabel title = new JLabel("🔗 Product–Supplier Links");
-        title.setFont(UIConstants.FONT_TITLE);
-        title.setForeground(UIConstants.TEXT_HEADER);
-        header.add(title, BorderLayout.WEST);
+        JLabel titleIcon = new JLabel("\uD83D\uDD17");
+        titleIcon.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 22));
+        titleIcon.setForeground(UIConstants.TEXT_HEADER);
+        JLabel titleText = new JLabel(" Product\u2013Supplier Links");
+        titleText.setFont(UIConstants.FONT_TITLE);
+        titleText.setForeground(UIConstants.TEXT_HEADER);
+        JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        titlePanel.setOpaque(false);
+        titlePanel.add(titleIcon);
+        titlePanel.add(titleText);
+        header.add(titlePanel, BorderLayout.WEST);
 
         JPanel right = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
         right.setOpaque(false);
