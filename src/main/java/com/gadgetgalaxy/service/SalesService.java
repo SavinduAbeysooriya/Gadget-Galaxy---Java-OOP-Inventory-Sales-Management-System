@@ -89,7 +89,7 @@ public class SalesService {
         }
 
         // 7. Audit Logging
-        String actionLog = String.format("Processed sale %s. Total: $%.2f", invoiceNo, totalAmount);
+        String actionLog = String.format("Processed sale %s. Total: LKR %.2f", invoiceNo, totalAmount);
         auditLogDAO.insert(soldByUserId, actionLog);
         FileUtil.logAction(salesperson != null ? salesperson.getUsername() : "system", "SALE CHECKOUT: " + invoiceNo);
 

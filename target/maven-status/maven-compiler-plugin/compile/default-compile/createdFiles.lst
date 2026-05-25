@@ -8,8 +8,10 @@ com\gadgetgalaxy\model\Supplier.class
 com\gadgetgalaxy\view\InventoryForm$1.class
 com\gadgetgalaxy\exception\DatabaseException.class
 com\gadgetgalaxy\service\AuthenticationService.class
+com\gadgetgalaxy\view\CategoryManagementForm.class
 com\gadgetgalaxy\view\SalesForm$3.class
 com\gadgetgalaxy\dao\DAO.class
+com\gadgetgalaxy\view\BrandManagementForm.class
 com\gadgetgalaxy\view\UIConstants$1.class
 com\gadgetgalaxy\view\LoginForm$2.class
 com\gadgetgalaxy\view\UserManagementForm$1.class
@@ -22,6 +24,7 @@ com\gadgetgalaxy\service\InventoryService.class
 com\gadgetgalaxy\view\Dashboard.class
 com\gadgetgalaxy\model\Brand.class
 com\gadgetgalaxy\view\ProductForm.class
+com\gadgetgalaxy\view\BrandManagementForm$1.class
 com\gadgetgalaxy\service\ReportService.class
 com\gadgetgalaxy\dao\SupplierDAO.class
 com\gadgetgalaxy\view\Dashboard$3.class
@@ -47,7 +50,6 @@ com\gadgetgalaxy\model\Product.class
 com\gadgetgalaxy\util\InvoiceGenerator.class
 com\gadgetgalaxy\view\InventoryForm$3.class
 com\gadgetgalaxy\model\Sale.class
-com\gadgetgalaxy\view\SalesForm$4.class
 com\gadgetgalaxy\dao\SalesDAO.class
 com\gadgetgalaxy\view\SalesForm$1.class
 com\gadgetgalaxy\dao\BrandDAO.class
@@ -56,6 +58,7 @@ com\gadgetgalaxy\view\JRoundedButton$1.class
 com\gadgetgalaxy\view\JRoundedButton.class
 com\gadgetgalaxy\view\SalesForm$2.class
 com\gadgetgalaxy\dao\UserDAO.class
+com\gadgetgalaxy\view\CategoryManagementForm$1.class
 com\gadgetgalaxy\model\SaleItem.class
 com\gadgetgalaxy\view\UIConstants.class
 com\gadgetgalaxy\model\Tablet.class
@@ -72,4 +75,3 @@ com\gadgetgalaxy\view\ReportsForm$2.class
 com\gadgetgalaxy\exception\AuthenticationException.class
 com\gadgetgalaxy\model\Inventory.class
 com\gadgetgalaxy\view\LoginForm$3.class
-com\gadgetgalaxy\view\SalesForm$5.class

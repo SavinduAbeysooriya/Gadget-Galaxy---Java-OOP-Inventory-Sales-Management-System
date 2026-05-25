@@ -1,6 +1,7 @@
 C:\Users\Savi Aby\Desktop\New folder (2)\Gadget Galaxy - Java OOP Inventory & Sales Management System\src\main\java\com\gadgetgalaxy\dao\InventoryDAO.java
 C:\Users\Savi Aby\Desktop\New folder (2)\Gadget Galaxy - Java OOP Inventory & Sales Management System\src\main\java\com\gadgetgalaxy\dao\AuditLogDAO.java
 C:\Users\Savi Aby\Desktop\New folder (2)\Gadget Galaxy - Java OOP Inventory & Sales Management System\src\main\java\com\gadgetgalaxy\model\Tablet.java
+C:\Users\Savi Aby\Desktop\New folder (2)\Gadget Galaxy - Java OOP Inventory & Sales Management System\src\main\java\com\gadgetgalaxy\view\BrandManagementForm.java
 C:\Users\Savi Aby\Desktop\New folder (2)\Gadget Galaxy - Java OOP Inventory & Sales Management System\src\main\java\com\gadgetgalaxy\service\AuthenticationService.java
 C:\Users\Savi Aby\Desktop\New folder (2)\Gadget Galaxy - Java OOP Inventory & Sales Management System\src\main\java\com\gadgetgalaxy\model\Customer.java
 C:\Users\Savi Aby\Desktop\New folder (2)\Gadget Galaxy - Java OOP Inventory & Sales Management System\src\main\java\com\gadgetgalaxy\view\Dashboard.java
@@ -34,6 +35,7 @@ C:\Users\Savi Aby\Desktop\New folder (2)\Gadget Galaxy - Java OOP Inventory & Sa
 C:\Users\Savi Aby\Desktop\New folder (2)\Gadget Galaxy - Java OOP Inventory & Sales Management System\src\main\java\com\gadgetgalaxy\util\InvoiceGenerator.java
 C:\Users\Savi Aby\Desktop\New folder (2)\Gadget Galaxy - Java OOP Inventory & Sales Management System\src\main\java\com\gadgetgalaxy\dao\SalesDAO.java
 C:\Users\Savi Aby\Desktop\New folder (2)\Gadget Galaxy - Java OOP Inventory & Sales Management System\src\main\java\com\gadgetgalaxy\model\Sale.java
+C:\Users\Savi Aby\Desktop\New folder (2)\Gadget Galaxy - Java OOP Inventory & Sales Management System\src\main\java\com\gadgetgalaxy\view\CategoryManagementForm.java
 C:\Users\Savi Aby\Desktop\New folder (2)\Gadget Galaxy - Java OOP Inventory & Sales Management System\src\main\java\com\gadgetgalaxy\model\SalesRepresentative.java
 C:\Users\Savi Aby\Desktop\New folder (2)\Gadget Galaxy - Java OOP Inventory & Sales Management System\src\main\java\com\gadgetgalaxy\model\Smartphone.java
 C:\Users\Savi Aby\Desktop\New folder (2)\Gadget Galaxy - Java OOP Inventory & Sales Management System\src\main\java\com\gadgetgalaxy\util\ValidationUtil.java

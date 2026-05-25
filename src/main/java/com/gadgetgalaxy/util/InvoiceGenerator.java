@@ -68,15 +68,15 @@ public final class InvoiceGenerator {
             if (name.length() > 24) {
                 name = name.substring(0, 21) + "...";
             }
-            sb.append(String.format("%-25s %-5d $%-11.2f $%-11.2f\n", 
-                    name, 
-                    item.getQuantity(), 
-                    item.getUnitPrice(), 
+            sb.append(String.format("%-25s %-5d LKR %-9.2f LKR %-9.2f\n",
+                    name,
+                    item.getQuantity(),
+                    item.getUnitPrice(),
                     item.getSubtotal()));
         }
         sb.append(border);
 
-        sb.append(String.format("GRAND TOTAL:                                  $%.2f\n", sale.getTotalAmount()));
+        sb.append(String.format("GRAND TOTAL:                             LKR %.2f\n", sale.getTotalAmount()));
         sb.append(String.format("Payment Method:                               %-15s\n", sale.getPaymentMethod()));
         sb.append(doubleBorder);
         sb.append("            Thank you for shopping at Gadget Galaxy!    \n");

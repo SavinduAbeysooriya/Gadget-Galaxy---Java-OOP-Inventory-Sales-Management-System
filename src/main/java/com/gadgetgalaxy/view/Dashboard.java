@@ -111,8 +111,12 @@ public class Dashboard extends JFrame {
 
             btnUsers   = createNavButton("👥", "Users", () -> showPanel(new UserManagementForm(controller)));
             btnReports = createNavButton("📈", "Reports", () -> showPanel(new ReportsForm(controller)));
+            JPanel btnCategories = createNavButton("🏷️", "Categories", () -> showPanel(new CategoryManagementForm(controller)));
+            JPanel btnBrands = createNavButton("🏢", "Brands", () -> showPanel(new BrandManagementForm(controller)));
             sidebar.add(btnUsers);
             sidebar.add(btnReports);
+            sidebar.add(btnCategories);
+            sidebar.add(btnBrands);
         }
 
         // Spacer
@@ -392,7 +396,7 @@ public class Dashboard extends JFrame {
             System.err.println("Dashboard stats error: " + e.getMessage());
         }
 
-        cardsRow.add(buildStatCard("Total Revenue", String.format("$%.2f", totalRevenue), UIConstants.ACCENT_TEAL, "💰"));
+        cardsRow.add(buildStatCard("Total Revenue", String.format("LKR %.2f", totalRevenue), UIConstants.ACCENT_TEAL, "💰"));
         cardsRow.add(buildStatCard("Total Sales", String.valueOf(totalSales), UIConstants.ACCENT_BLUE, "🛒"));
         cardsRow.add(buildStatCard("Products", String.valueOf(totalProducts), UIConstants.ACCENT_PURPLE, "📱"));
 
